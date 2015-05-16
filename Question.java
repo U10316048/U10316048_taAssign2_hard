@@ -1,6 +1,9 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,7 +18,7 @@ public class Question extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	JLabel qNumber,qLabel,A,B,C,D,content1,content2,correct;
+	JLabel qNumber,qLabel,A,B,C,D,content1,content2,correct,time;
 	JTextArea jta;
 	JScrollPane jsp1;
 	JTextField jtf;
@@ -26,11 +29,14 @@ public class Question extends JFrame{
 	String sa,sb,sc,sd;
 	ActionListener aaa,bbb,ccc,ddd,aaap,bbbp,cccp,dddp;
 	String name;
+	Timer timer = new Timer();
+	int sec = 61;
 	
 	public Question(String name){
 		this.name = name;
 		this.setTitle("u10316048_question  使用者: ["+this.name+"]");
 		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setSize(450, 700);
 		this.setLayout(null);
@@ -81,6 +87,9 @@ public class Question extends JFrame{
 		correct = new JLabel();
 		correct.setBounds(200,450,80,30);
 		
+		time = new JLabel();
+		time.setBounds(330,20,100,50);
+		
 		this.add(qNumber);
 		this.add(jbA);
 		this.add(jbB);
@@ -97,6 +106,7 @@ public class Question extends JFrame{
 		this.add(jtf);
 		this.add(next);
 		this.add(correct);
+		this.add(time);
 		
 		aaa = new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -159,6 +169,7 @@ public class Question extends JFrame{
 			}
 		};
 		
+		timer.schedule(new SimpleTask(),500,1000);
 		q1();
 		
 		this.setVisible(true);
@@ -440,6 +451,7 @@ public class Question extends JFrame{
 		jbB.setEnabled(true);
 		jbC.setEnabled(true);
 		jbD.setEnabled(true);
+		sec = 61;
 	}
 	
 	public void getPoint(){
@@ -450,5 +462,26 @@ public class Question extends JFrame{
 	
 	public void close(){
 		this.setVisible(false);
+	}
+	
+	private class SimpleTask extends TimerTask{
+		public void run(){
+			sec--;
+			if(sec>10){
+				time.setFont(new Font("Calibri",0,32));
+				time.setText(Integer.toString(sec));
+				time.setForeground(Color.blue);
+				
+			}else if(sec<=10&&sec>=0){
+				time.setFont(new Font("Calibri",0,32));
+				time.setText(Integer.toString(sec));
+				time.setForeground(Color.red);
+			}else{
+				setButtonEnabledfalse();
+				time.setFont(new Font("Calibri",0,20));
+				time.setText("Time out!");
+				time.setForeground(Color.red);
+			}
+		}
 	}
 }
